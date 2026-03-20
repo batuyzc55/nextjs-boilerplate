@@ -1,72 +1,87 @@
-import React from 'react';
+"use client";
+import React, { useState } from 'react';
 
-export default function BStatikerHome() {
+// TS500 Standart Birim Ağırlıkları (kg/m)
+const birimAgirliklar: Record<string, number> = {
+  "8": 0.395,
+  "10": 0.617,
+  "12": 0.888,
+  "14": 1.208,
+  "16": 1.578,
+  "18": 1.998,
+  "20": 2.466,
+  "22": 2.984,
+  "25": 3.853,
+  "28": 4.834,
+  "32": 6.313
+};
+
+export default function MetrajHesapla() {
+  const [cap, setCap] = useState("12");
+  const [boy, setBoy] = useState("");
+  const [adet, setAdet] = useState("");
+  const [liste, setListe] = useState<{ id: number, cap: string, toplamMetre: number, toplamKg: number }[]>([]);
+
+  const ekle = () => {
+    if (!boy || !adet) return;
+    const toplamMetre = parseFloat(boy) * parseInt(adet);
+    const toplamKg = toplamMetre * birimAgirliklar[cap];
+    
+    setListe([...liste, { id: Date.now(), cap, toplamMetre, toplamKg }]);
+    setBoy(""); setAdet("");
+  };
+
+  const toplamTonaj = liste.reduce((acc, item) => acc + item.toplamKg, 0) / 1000;
+
   return (
-    <div style={{
-      backgroundColor: '#0a0a0a',
-      color: '#fff',
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontFamily: 'sans-serif',
-      textAlign: 'center',
-      padding: '20px'
-    }}>
-      {/* Header / Logo Alanı */}
-      <header style={{ marginBottom: '40px' }}>
-        <h1 style={{ 
-          fontSize: '3.5rem', 
-          fontWeight: 'bold', 
-          letterSpacing: '-1px',
-          margin: '0' 
-        }}>
-          b<span style={{ color: '#00d1b2' }}>statiker</span>
-        </h1>
-        <p style={{ 
-          fontSize: '1.2rem', 
-          color: '#888', 
-          marginTop: '10px',
-          textTransform: 'uppercase',
-          letterSpacing: '2px'
-        }}>
-          Statik Hesaplarda Dijital Güç
-        </p>
-      </header>
+    <div className="p-8 max-w-4xl mx-auto bg-slate-50 rounded-xl shadow-lg border border-slate-200">
+      <h1 className="text-3xl font-bold text-slate-900 mb-2">bstatiker</h1>
+      <p className="text-slate-600 mb-8 italic">"Statik Hesaplarda Dijital Güç"</p>
 
-      {/* Ana Mesaj Bölümü */}
-      <main style={{
-        maxWidth: '600px',
-        border: '1px solid #333',
-        padding: '40px',
-        borderRadius: '12px',
-        backgroundColor: '#111'
-      }}>
-        <h2 style={{ color: '#00d1b2', marginBottom: '20px' }}>Çok Yakında Yayındayız</h2>
-        <p style={{ lineHeight: '1.6', fontSize: '1.1rem' }}>
-          Mühendislik hesaplarını dijitalle buluşturuyoruz. 
-          Donatı metrajından statik rapor analizine kadar her şey parmaklarınızın ucunda olacak.
-        </p>
-        
-        {/* Örnek Donatı Verisi (Sana Özel) */}
-        <div style={{
-          marginTop: '30px',
-          padding: '15px',
-          backgroundColor: '#1a1a1a',
-          borderRadius: '8px',
-          fontSize: '0.9rem',
-          color: '#00d1b2',
-          borderLeft: '4px solid #00d1b2'
-        }}>
-          Son Hesaplama: <strong>84.5 kg Donatı Metrajı</strong> (Sistem Testi Tamamlandı)
+      {/* Giriş Alanı */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 p-6 bg-white rounded-lg border border-slate-200">
+        <div>
+          <label className="block text-sm font-semibold text-slate-700">Demir Çapı (Φ)</label>
+          <select value={cap} onChange={(e) => setCap(e.target.value)} className="w-full p-2 border rounded mt-1">
+            {Object.keys(birimAgirliklar).map(d => <option key={d} value={d}>Φ{d}</option>)}
+          </select>
         </div>
-      </main>
+        <div>
+          <label className="block text-sm font-semibold text-slate-700">Boy (m)</label>
+          <input type="number" value={boy} onChange={(e) => setBoy(e.target.value)} className="w-full p-2 border rounded mt-1" placeholder="Örn: 12" />
+        </div>
+        <div>
+          <label className="block text-sm font-semibold text-slate-700">Adet</label>
+          <input type="number" value={adet} onChange={(e) => setAdet(e.target.value)} className="w-full p-2 border rounded mt-1" placeholder="Örn: 10" />
+        </div>
+        <button onClick={ekle} className="bg-blue-600 text-white font-bold py-2 px-4 rounded self-end hover:bg-blue-700 transition">Listeye Ekle</button>
+      </div>
 
-      {/* Footer */}
-      <footer style={{ marginTop: '50px', color: '#444', fontSize: '0.8rem' }}>
-        &copy; 2026 bstatiker.com.tr | Mühendislik ve Teknoloji
-      </footer>
+      {/* Tablo */}
+      <table className="w-full text-left bg-white rounded-lg overflow-hidden shadow">
+        <thead className="bg-slate-800 text-white">
+          <tr>
+            <th className="p-4">Çap</th>
+            <th className="p-4">Toplam Metraj</th>
+            <th className="p-4">Ağırlık (kg)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {liste.map(item => (
+            <tr key={item.id} className="border-b hover:bg-slate-50">
+              <td className="p-4 font-bold">Φ{item.cap}</td>
+              <td className="p-4">{item.toplamMetre.toFixed(2)} m</td>
+              <td className="p-4 text-blue-600 font-semibold">{item.toplamKg.toFixed(2)} kg</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {/* Özet */}
+      <div className="mt-8 p-6 bg-slate-900 text-white rounded-lg flex justify-between items-center">
+        <span className="text-xl font-medium">Toplam Metraj Tonajı:</span>
+        <span className="text-3xl font-bold text-green-400">{toplamTonaj.toFixed(4)} TON</span>
+      </div>
     </div>
   );
 }
