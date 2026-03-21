@@ -1,14 +1,21 @@
+"use client";
 import React from 'react';
 import Link from 'next/link';
 
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-slate-900 text-white font-sans">
-      {/* --- KAHRAMAN BÖLÜMÜ (O Sevdiğin Şık Tasarım) --- */}
+      {/* --- KAHRAMAN BÖLÜMÜ (Giriş Tasarımı) --- */}
       <section className="relative flex flex-col items-center justify-center py-32 px-6 text-center overflow-hidden">
-        {/* Arka Plan Süslemesi (Mühendislik Çizgileri) */}
+        {/* Arka Plan Süslemesi (Mühendislik Çizgileri - Hata Giderildi) */}
         <div className="absolute inset-0 opacity-10 pointer-events-none">
-          <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(#334155 1px, transparent 1px), linear-gradient(90deg, #334155 1px, transparent 1px)', size: '40px 40px', backgroundSize: '40px 40px' }}></div>
+          <div 
+            className="absolute inset-0" 
+            style={{ 
+              backgroundImage: 'linear-gradient(#334155 1px, transparent 1px), linear-gradient(90deg, #334155 1px, transparent 1px)', 
+              backgroundSize: '40px 40px' 
+            }}
+          ></div>
         </div>
 
         <div className="relative z-10">
@@ -30,7 +37,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* --- TEKNİK DETAYLAR --- */}
+      {/* --- TEKNİK ÖZELLİKLER --- */}
       <section className="max-w-6xl mx-auto py-20 px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="p-8 rounded-3xl bg-slate-800/50 border border-slate-700 hover:border-blue-500/50 transition">
           <div className="text-blue-400 text-3xl mb-4">🏗️</div>
@@ -54,6 +61,11 @@ export default function HomePage() {
           </p>
         </div>
       </section>
+
+      {/* --- FOOTER --- */}
+      <footer className="py-10 text-center text-slate-500 text-sm border-t border-slate-800">
+        © 2026 bstatiker | Tüm Hakları Saklıdır.
+      </footer>
     </main>
   );
 }
