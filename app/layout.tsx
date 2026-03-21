@@ -1,40 +1,30 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Link from "next/link"; 
+import Link from "next/link";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "bstatiker | Statik Hesaplarda Dijital Güç",
-  description: "TBDY 2018 ve TS500 Uyumlu Mühendislik Çözümleri",
+  description: "TBDY 2018 ve TS500 Standartlarında Mühendislik Çözümleri",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="tr">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {/* --- NAVBAR --- */}
-        <nav className="bg-slate-900 text-white p-4 sticky top-0 z-50">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-50`}>
+        {/* --- ÜST MENÜ --- */}
+        <nav className="bg-slate-900 text-white p-4 sticky top-0 z-50 shadow-xl">
           <div className="max-w-6xl mx-auto flex justify-between items-center">
-            <Link href="/" className="text-xl font-bold text-blue-400 tracking-tighter">
+            <Link href="/" className="text-2xl font-black tracking-tighter text-blue-400">
               bstatiker
             </Link>
-            <div className="space-x-4 text-sm font-medium">
+            <div className="flex gap-6 text-xs md:text-sm font-bold tracking-widest">
               <Link href="/" className="hover:text-blue-400 transition">ANA SAYFA</Link>
-              <Link href="/metraj" className="hover:text-blue-400 transition">METRAJ HESAPLA</Link>
+              <Link href="/metraj" className="hover:text-blue-400 transition text-blue-400 border-b-2 border-blue-400 pb-1">DONATI CETVELİ</Link>
+              <Link href="/projeler" className="hover:text-blue-400 transition opacity-50 cursor-not-allowed">PROJELER</Link>
             </div>
           </div>
         </nav>
