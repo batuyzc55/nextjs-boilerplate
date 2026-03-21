@@ -1,87 +1,59 @@
-"use client";
-import React, { useState } from 'react';
+import React from 'react';
+import Link from 'next/link';
 
-// TS500 Standart Birim Ağırlıkları (kg/m)
-const birimAgirliklar: Record<string, number> = {
-  "8": 0.395,
-  "10": 0.617,
-  "12": 0.888,
-  "14": 1.208,
-  "16": 1.578,
-  "18": 1.998,
-  "20": 2.466,
-  "22": 2.984,
-  "25": 3.853,
-  "28": 4.834,
-  "32": 6.313
-};
-
-export default function MetrajHesapla() {
-  const [cap, setCap] = useState("12");
-  const [boy, setBoy] = useState("");
-  const [adet, setAdet] = useState("");
-  const [liste, setListe] = useState<{ id: number, cap: string, toplamMetre: number, toplamKg: number }[]>([]);
-
-  const ekle = () => {
-    if (!boy || !adet) return;
-    const toplamMetre = parseFloat(boy) * parseInt(adet);
-    const toplamKg = toplamMetre * birimAgirliklar[cap];
-    
-    setListe([...liste, { id: Date.now(), cap, toplamMetre, toplamKg }]);
-    setBoy(""); setAdet("");
-  };
-
-  const toplamTonaj = liste.reduce((acc, item) => acc + item.toplamKg, 0) / 1000;
-
+export default function HomePage() {
   return (
-    <div className="p-8 max-w-4xl mx-auto bg-slate-50 rounded-xl shadow-lg border border-slate-200">
-      <h1 className="text-3xl font-bold text-slate-900 mb-2">bstatiker</h1>
-      <p className="text-slate-600 mb-8 italic">"Statik Hesaplarda Dijital Güç"</p>
-
-      {/* Giriş Alanı */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 p-6 bg-white rounded-lg border border-slate-200">
-        <div>
-          <label className="block text-sm font-semibold text-slate-700">Demir Çapı (Φ)</label>
-          <select value={cap} onChange={(e) => setCap(e.target.value)} className="w-full p-2 border rounded mt-1">
-            {Object.keys(birimAgirliklar).map(d => <option key={d} value={d}>Φ{d}</option>)}
-          </select>
+    <main className="min-h-screen bg-slate-900 text-white font-sans">
+      {/* --- KAHRAMAN BÖLÜMÜ (O Sevdiğin Şık Tasarım) --- */}
+      <section className="relative flex flex-col items-center justify-center py-32 px-6 text-center overflow-hidden">
+        {/* Arka Plan Süslemesi (Mühendislik Çizgileri) */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
+          <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(#334155 1px, transparent 1px), linear-gradient(90deg, #334155 1px, transparent 1px)', size: '40px 40px', backgroundSize: '40px 40px' }}></div>
         </div>
-        <div>
-          <label className="block text-sm font-semibold text-slate-700">Boy (m)</label>
-          <input type="number" value={boy} onChange={(e) => setBoy(e.target.value)} className="w-full p-2 border rounded mt-1" placeholder="Örn: 12" />
-        </div>
-        <div>
-          <label className="block text-sm font-semibold text-slate-700">Adet</label>
-          <input type="number" value={adet} onChange={(e) => setAdet(e.target.value)} className="w-full p-2 border rounded mt-1" placeholder="Örn: 10" />
-        </div>
-        <button onClick={ekle} className="bg-blue-600 text-white font-bold py-2 px-4 rounded self-end hover:bg-blue-700 transition">Listeye Ekle</button>
-      </div>
 
-      {/* Tablo */}
-      <table className="w-full text-left bg-white rounded-lg overflow-hidden shadow">
-        <thead className="bg-slate-800 text-white">
-          <tr>
-            <th className="p-4">Çap</th>
-            <th className="p-4">Toplam Metraj</th>
-            <th className="p-4">Ağırlık (kg)</th>
-          </tr>
-        </thead>
-        <tbody>
-          {liste.map(item => (
-            <tr key={item.id} className="border-b hover:bg-slate-50">
-              <td className="p-4 font-bold">Φ{item.cap}</td>
-              <td className="p-4">{item.toplamMetre.toFixed(2)} m</td>
-              <td className="p-4 text-blue-600 font-semibold">{item.toplamKg.toFixed(2)} kg</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+        <div className="relative z-10">
+          <h1 className="text-6xl md:text-8xl font-black mb-6 tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
+            bstatiker
+          </h1>
+          <p className="text-2xl md:text-3xl font-light mb-12 italic text-slate-300">
+            "Statik Hesaplarda Dijital Güç"
+          </p>
+          
+          <div className="flex flex-col md:flex-row gap-6 justify-center">
+            <Link href="/metraj" className="bg-blue-600 hover:bg-blue-500 text-white px-10 py-5 rounded-2xl font-bold text-lg transition-all shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:scale-105">
+              Metraj Hesaplayıcı
+            </Link>
+            <Link href="/projeler" className="bg-transparent border-2 border-slate-700 hover:border-blue-400 text-slate-300 hover:text-white px-10 py-5 rounded-2xl font-bold text-lg transition-all">
+              Proje Portfolyosu
+            </Link>
+          </div>
+        </div>
+      </section>
 
-      {/* Özet */}
-      <div className="mt-8 p-6 bg-slate-900 text-white rounded-lg flex justify-between items-center">
-        <span className="text-xl font-medium">Toplam Metraj Tonajı:</span>
-        <span className="text-3xl font-bold text-green-400">{toplamTonaj.toFixed(4)} TON</span>
-      </div>
-    </div>
+      {/* --- TEKNİK DETAYLAR --- */}
+      <section className="max-w-6xl mx-auto py-20 px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="p-8 rounded-3xl bg-slate-800/50 border border-slate-700 hover:border-blue-500/50 transition">
+          <div className="text-blue-400 text-3xl mb-4">🏗️</div>
+          <h3 className="text-xl font-bold mb-3 text-white">TBDY 2018</h3>
+          <p className="text-slate-400 text-sm leading-relaxed">
+            Türkiye Bina Deprem Yönetmeliği standartlarına tam uyumlu statik analiz ve tasarım süreçleri.
+          </p>
+        </div>
+        <div className="p-8 rounded-3xl bg-slate-800/50 border border-slate-700 hover:border-blue-500/50 transition">
+          <div className="text-blue-400 text-3xl mb-4">📊</div>
+          <h3 className="text-xl font-bold mb-3 text-white">Hızlı Metraj</h3>
+          <p className="text-slate-400 text-sm leading-relaxed">
+            Donatı metraj cetvellerini dijital ortamda saniyeler içinde oluşturun, tonajınızı anında görün.
+          </p>
+        </div>
+        <div className="p-8 rounded-3xl bg-slate-800/50 border border-slate-700 hover:border-blue-500/50 transition">
+          <div className="text-blue-400 text-3xl mb-4">💻</div>
+          <h3 className="text-xl font-bold mb-3 text-white">Dijital Mühendislik</h3>
+          <p className="text-slate-400 text-sm leading-relaxed">
+            Statik hesapları modernize ederek projelerinizi daha güvenilir ve erişilebilir kılıyoruz.
+          </p>
+        </div>
+      </section>
+    </main>
   );
 }
